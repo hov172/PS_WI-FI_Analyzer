@@ -21,6 +21,15 @@ The application presents this information through a user-friendly graphical inte
 
 Image Place holder
 
+### System Requirements 
+
+    # Comprehensive system validation:
+    # ✅ Location Services - Required for WiFi scanning
+    # ✅ WiFi Adapter - Active wireless network adapter  
+    # ✅ Admin Rights - Enhanced permissions (optional but recommended)
+    
+    # Returns detailed status with specific issue identification
+
 ## 🚀 Quick Start Guide
 
 ### Default Usage (Interactive)
