@@ -19,7 +19,18 @@ Key functionality includes:
 
 The application presents this information through a user-friendly graphical interface using Windows Forms technology, with color coding and clear visual indicators to help users understand their WiFi environment at a glance.
 
-Image Place holder
+<img width="959" height="595" alt="image1" src="https://github.com/user-attachments/assets/ec392510-f839-4b45-9c22-ddeffb8309fb" />
+
+
+<img width="966" height="597" alt="image2" src="https://github.com/user-attachments/assets/d83236a6-03eb-40c4-8b54-5c497d1c7850" />
+
+
+<img width="641" height="970" alt="image3" src="https://github.com/user-attachments/assets/1d050260-5854-43a4-bc93-e2e30ca88d9e" />
+
+
+<img width="641" height="970" alt="image4" src="https://github.com/user-attachments/assets/214b3608-41ae-44fb-b1b7-e2ed7f1abc60" />
+
+---
 
 ### System Requirements 
 
