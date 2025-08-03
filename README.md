@@ -19,6 +19,9 @@ Key functionality includes:
 
 The application presents this information through a user-friendly graphical interface using Windows Forms technology, with color coding and clear visual indicators to help users understand their WiFi environment at a glance.
 
+<img width="621" height="508" alt="Gudied" src="https://github.com/user-attachments/assets/cc474cc5-8751-4c9b-9d40-476c3dfcda27" />
+
+
 <img width="959" height="595" alt="image1" src="https://github.com/user-attachments/assets/ec392510-f839-4b45-9c22-ddeffb8309fb" />
 
 
