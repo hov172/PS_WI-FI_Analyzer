@@ -4,6 +4,10 @@
 
 This PowerShell script creates a comprehensive WiFi analyzer application with intelligent hybrid startup capabilities that helps users diagnose wireless network issues and optimize performance. The application features both guided setup for beginners and quick start for experienced users, automatically handles system requirements, and provides detailed network analysis.
 
+- I also created Macos and Windows App that would do similar reports that your users can run.
+- Windows: https://github.com/hov172/WinWiFiAnalyzer/tree/main
+- Macos:   https://github.com/hov172/WifDiagReport
+
 Key functionality includes:
 - **Hybrid Startup System**: Intelligent choice between Guided Setup (with system requirement checking) and Quick Start (for experienced users)
 - **Automated Requirement Detection**: Checks location services, WiFi adapters, and provides step-by-step guidance to fix issues
