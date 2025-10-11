@@ -818,7 +818,7 @@ The application includes comprehensive error handling:
 
 ## Author
 
-Created by Jesus Ayala from Sarah Lawrence College
+Created by Jesus Ayala from Ayala Solutions
 
 ---
 
