@@ -118,17 +118,91 @@ Get-Help Start-WiFiAnalyzer -Full
 
 ### Module Commands
 
-The WiFiAnalyzer module provides the following cmdlets:
+The WiFiAnalyzer module provides the following cmdlets (all using approved PowerShell verbs):
 
 | Command | Description |
 |---------|-------------|
-| `Start-WiFiAnalyzer` | Launch the main GUI application |
-| `Get-WiFiNetworks` | Scan and return available WiFi networks |
-| `Get-WiFiSignalStrength` | Get signal strength for current connection |
-| `Test-WiFiSpeed` | Perform network speed test |
-| `Get-WiFiChannelInfo` | Analyze channel congestion |
-| `Export-WiFiReport` | Generate and save WiFi analysis report |
-| `Get-WiFiSystemInfo` | Retrieve system and adapter information |
+| `Start-WiFiAnalyzer` | Launch the main GUI application with startup options |
+| `Start-WiFiAnalyzerDirect` | Launch GUI directly (skip startup dialogs) |
+| `Get-WiFiScan` | Scan for nearby WiFi networks |
+| `Get-MACAddress` | Get the MAC address of your WiFi adapter |
+| `Get-ConnectedSSID` | Get info about current WiFi connection |
+| `Get-ComputerInfoExtras` | Get computer name and IP address |
+| `Test-ChannelCongestion` | Analyze channel congestion levels |
+| `Get-BestChannel` | Get channel recommendations for 2.4GHz and 5GHz |
+| `Test-NetworkSpeed` | Perform network latency test |
+| `Export-WiFiReport` | Generate and save WiFi analysis report (HTML/CSV) |
+| `Invoke-WiFiAnalyzerAll` | Run complete analysis and export report from CLI |
+| `Start-GuidedSetup` | Launch guided setup walkthrough |
+| `Start-QuickStart` | Launch quick start mode |
+| `Show-MainWiFiAnalyzerForm` | Show main GUI form directly |
+| `Show-StartupChoiceDialog` | Show startup choice dialog |
+| `Show-ExportInfoForm` | Show export report info form |
+
+### Command Parameters & Switches
+
+#### Start-WiFiAnalyzer
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `-QuickStart` | switch | Skip all startup dialogs and launch directly |
+| `-SkipPreflightCheck` | switch | Alias for QuickStart |
+
+**Example:**
+```powershell
+Start-WiFiAnalyzer -QuickStart
+```
+
+#### Invoke-WiFiAnalyzerAll
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `-OutputFormat` | string | 'HTML' or 'CSV' (default: 'HTML') |
+| `-OutputPath` | string | Path to save report (optional, defaults to Documents) |
+| `-SkipReportInfo` | switch | Skip user info prompts |
+
+**Example:**
+```powershell
+Invoke-WiFiAnalyzerAll -SkipReportInfo
+Invoke-WiFiAnalyzerAll -OutputPath "$env:USERPROFILE\Desktop\WiFiReport.html"
+```
+
+#### Export-WiFiReport
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `-networks` | array | WiFi network objects (required) |
+| `-OutputFormat` | string | 'HTML' or 'CSV' (default: 'HTML') |
+| `-OutputPath` | string | Path to save report (optional) |
+| `-SkipReportInfo` | switch | Skip user info prompts |
+
+**Example:**
+```powershell
+$networks = Get-WiFiScan
+Export-WiFiReport -networks $networks -OutputFormat HTML -SkipReportInfo
+```
+
+#### Get-BestChannel
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `-networks` | array | WiFi network objects from Get-WiFiScan (required) |
+
+**Example:**
+```powershell
+$networks = Get-WiFiScan
+$recommendations = Get-BestChannel -networks $networks
+Write-Host "Best 2.4GHz: $($recommendations.'2.4GHz')"
+Write-Host "Best 5GHz: $($recommendations.'5GHz')"
+```
+
+#### Test-NetworkSpeed
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `-TestUrl` | string | URL to test against (default: 'https://www.google.com') |
+| `-Iterations` | int | Number of test iterations (default: 3) |
+
+**Example:**
+```powershell
+$speedTest = Test-NetworkSpeed -Iterations 5
+Write-Host "Average Latency: $($speedTest.AverageLatency) ms"
+```
 
 ### Using the Standalone Script
 
@@ -173,24 +247,72 @@ cd PS_WI-FI_Analyzer
 
 #### Interactive Mode (Recommended)
 ```powershell
+# Using the module
+Import-Module WiFiAnalyzer
+Start-WiFiAnalyzer
+
+# Or using the standalone script
 .\WiFiAnalyzerNew.ps1
 ```
 Shows startup choice dialog - perfect for mixed-skill environments.
 
 #### Quick Start for IT Professionals
 ```powershell
+# Using the module
+Start-WiFiAnalyzer -QuickStart
+
+# Or using the standalone script
 .\WiFiAnalyzerNew.ps1 -QuickStart
 ```
 Skip all setup checks and go straight to scanning.
 
-#### Debug Mode for Troubleshooting
+#### Command-Line Analysis and Report Generation
 ```powershell
-.\WiFiAnalyzerNew.ps1 -Debug
+# Run complete analysis and save to Documents folder
+Invoke-WiFiAnalyzerAll -SkipReportInfo
+
+# Specify custom output path
+Invoke-WiFiAnalyzerAll -SkipReportInfo -OutputPath "C:\Reports\WiFi_Analysis.html"
+
+# Export as CSV
+Invoke-WiFiAnalyzerAll -OutputFormat CSV -OutputPath "C:\Reports\WiFi_Data.csv"
 ```
-Enable detailed diagnostic output.
+
+#### Advanced Scanning and Analysis
+```powershell
+# Scan networks and display results
+$networks = Get-WiFiScan
+$networks | Format-Table SSID, Signal, Channel, Band, Security -AutoSize
+
+# Get channel recommendations
+$recommendations = Get-BestChannel -networks $networks
+Write-Host "Recommended 2.4GHz Channel: $($recommendations.'2.4GHz')"
+Write-Host "Recommended 5GHz Channel: $($recommendations.'5GHz')"
+
+# Test network speed
+$speedTest = Test-NetworkSpeed
+if ($speedTest.Success) {
+    Write-Host "Average Latency: $($speedTest.AverageLatency) ms"
+}
+
+# Get system information
+$mac = Get-MACAddress
+$connected = Get-ConnectedSSID
+$computerInfo = Get-ComputerInfoExtras
+Write-Host "MAC: $mac"
+Write-Host "Connected to: $($connected.SSID)"
+Write-Host "Computer: $($computerInfo.ComputerName)"
+Write-Host "IP: $($computerInfo.IPAddress)"
+```
 
 #### Show Help
 ```powershell
+# Get help on any command
+Get-Help Start-WiFiAnalyzer -Full
+Get-Help Invoke-WiFiAnalyzerAll -Examples
+Get-Help Get-WiFiScan -Detailed
+
+# Or using the standalone script
 .\WiFiAnalyzerNew.ps1 -help
 ```
 
@@ -621,40 +743,67 @@ The module supports PowerShell pipeline operations:
 
 ```powershell
 # Get networks and filter by signal strength
-Get-WiFiNetworks | Where-Object { $_.Signal -gt 70 }
+Get-WiFiScan | Where-Object { $_.Signal -gt 70 }
+
+# Filter by security type
+Get-WiFiScan | Where-Object { $_.Security -match 'WPA2' }
 
 # Export to CSV
-Get-WiFiNetworks -Detailed | Export-Csv -Path "networks.csv"
+Get-WiFiScan | Export-Csv -Path "networks.csv" -NoTypeInformation
 
-# Find best 5GHz channel
-Get-WiFiChannelInfo -Band '5GHz' -ShowRecommendations | 
-    Select-Object RecommendedChannel
+# Find networks on specific channel
+Get-WiFiScan | Where-Object { $_.Channel -eq 6 }
+
+# Get only 5GHz networks
+Get-WiFiScan | Where-Object { $_.Band -eq '5 GHz' } | 
+    Sort-Object Signal -Descending
 ```
 
 #### Scripting Examples
 
 ```powershell
-# Automated monitoring script
+# Automated monitoring script - check signal strength
 while ($true) {
-    $signal = Get-WiFiSignalStrength
-    if ($signal -lt 30) {
-        Write-Warning "Low WiFi signal: $signal%"
+    $connected = Get-ConnectedSSID
+    $networks = Get-WiFiScan
+    $currentNetwork = $networks | Where-Object { $_.SSID -eq $connected.SSID }
+    
+    if ($currentNetwork -and $currentNetwork.Signal -lt 30) {
+        Write-Warning "Low WiFi signal: $($currentNetwork.Signal)%"
         # Trigger notification or action
     }
     Start-Sleep -Seconds 60
 }
 
-# Batch report generation
-$locations = @('Building-A', 'Building-B', 'Building-C')
-foreach ($loc in $locations) {
-    Export-WiFiReport -Path "C:\Reports\$loc`_WiFi.txt"
-}
+# Batch report generation for multiple locations
+$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$networks = Get-WiFiScan
+
+# Generate reports in different formats
+Export-WiFiReport -networks $networks -OutputFormat HTML `
+    -OutputPath "C:\Reports\WiFi_Report_$timestamp.html" -SkipReportInfo
+    
+Export-WiFiReport -networks $networks -OutputFormat CSV `
+    -OutputPath "C:\Reports\WiFi_Data_$timestamp.csv" -SkipReportInfo
 
 # Channel optimization check
-$channels = Get-WiFiChannelInfo -ShowRecommendations
-if ($channels.CurrentChannel -ne $channels.RecommendedChannel) {
-    Write-Host "Consider switching to channel $($channels.RecommendedChannel)"
+$networks = Get-WiFiScan
+$channels = Get-BestChannel -networks $networks
+$connected = Get-ConnectedSSID
+
+Write-Host "Current Network: $($connected.SSID)"
+Write-Host "Recommended 2.4GHz Channel: $($channels.'2.4GHz')"
+Write-Host "Recommended 5GHz Channel: $($channels.'5GHz')"
+
+# Automated daily report
+$job = {
+    Import-Module WiFiAnalyzer
+    $date = Get-Date -Format "yyyy-MM-dd"
+    Invoke-WiFiAnalyzerAll -SkipReportInfo `
+        -OutputPath "C:\Reports\Daily\WiFi_$date.html"
 }
+$trigger = New-JobTrigger -Daily -At 9am
+Register-ScheduledJob -Name "DailyWiFiReport" -ScriptBlock $job -Trigger $trigger
 ```
 
 ### Troubleshooting Module Installation
@@ -733,58 +882,116 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Install-Module -Name WiFiAnalyzer -Scope CurrentUser -Force
 
 # Launch GUI
-Start-WiFiAnalyzer                    # Interactive mode
+Start-WiFiAnalyzer                    # Interactive mode with startup dialog
 Start-WiFiAnalyzer -QuickStart        # Skip setup checks
-Start-WiFiAnalyzer -Debug             # Troubleshooting mode
+Start-WiFiAnalyzerDirect              # Direct launch (no dialogs)
 
-# Network Operations
-Get-WiFiNetworks                      # List all networks
-Get-WiFiNetworks -Band '5GHz'         # 5GHz only
-Get-WiFiSignalStrength                # Current signal
-Get-WiFiSignalStrength -Continuous    # Live monitoring
+# Command-Line Analysis
+Invoke-WiFiAnalyzerAll -SkipReportInfo                    # Quick report
+Invoke-WiFiAnalyzerAll -OutputPath "C:\Reports\wifi.html" # Custom path
 
-# Analysis & Testing
-Test-WiFiSpeed                        # Full speed test
-Get-WiFiChannelInfo -ShowRecommendations
-Export-WiFiReport -IncludeSpeedTest
+# Network Scanning & Analysis
+Get-WiFiScan                          # List all networks
+Get-WiFiScan | Where-Object {$_.Band -eq '5 GHz'}         # 5GHz only
+Get-ConnectedSSID                     # Current connection
+Get-MACAddress                        # Adapter MAC address
+
+# Channel Analysis
+$networks = Get-WiFiScan
+Get-BestChannel -networks $networks   # Get recommendations
+Test-ChannelCongestion -networks $networks  # Analyze congestion
+
+# Network Testing
+Test-NetworkSpeed                     # Latency test
+Test-NetworkSpeed -Iterations 5       # Custom iterations
+
+# Report Generation  
+$networks = Get-WiFiScan
+Export-WiFiReport -networks $networks -OutputFormat HTML
+Export-WiFiReport -networks $networks -OutputFormat CSV -SkipReportInfo
+
+# System Information
+Get-ComputerInfoExtras               # Computer name & IP
+Get-ConnectedSSID                    # Current SSID & BSSID
 
 # Module Management
 Get-Command -Module WiFiAnalyzer      # List all commands
 Update-Module -Name WiFiAnalyzer      # Update to latest
 Get-Help Start-WiFiAnalyzer -Full    # Detailed help
+Get-Help Invoke-WiFiAnalyzerAll -Examples  # Command examples
 ```
 
 ### Common Use Cases
 
 #### Monitor Signal Strength
 ```powershell
+# Continuous monitoring with color-coded output
 while ($true) {
-    $signal = Get-WiFiSignalStrength
-    $color = if ($signal -ge 70) { 'Green' } elseif ($signal -ge 40) { 'Yellow' } else { 'Red' }
-    Write-Host "Signal: $signal%" -ForegroundColor $color
+    $connected = Get-ConnectedSSID
+    $networks = Get-WiFiScan
+    $current = $networks | Where-Object { $_.SSID -eq $connected.SSID }
+    
+    if ($current) {
+        $signal = $current.Signal
+        $color = if ($signal -ge 70) { 'Green' } elseif ($signal -ge 40) { 'Yellow' } else { 'Red' }
+        Write-Host "[$($connected.SSID)] Signal: $signal%" -ForegroundColor $color
+    }
     Start-Sleep -Seconds 5
 }
 ```
 
 #### Find Best Networks
 ```powershell
-Get-WiFiNetworks | 
+Get-WiFiScan | 
     Where-Object { $_.Signal -gt 70 -and $_.Security -match 'WPA2' } |
     Sort-Object Signal -Descending |
-    Select-Object SSID, Signal, Channel, Security
+    Select-Object SSID, Signal, Channel, Band, Security |
+    Format-Table -AutoSize
 ```
 
 #### Export Analysis to CSV
 ```powershell
-Get-WiFiNetworks -Detailed | 
-    Export-Csv -Path "wifi_scan_$(Get-Date -Format 'yyyyMMdd').csv" -NoTypeInformation
+$timestamp = Get-Date -Format 'yyyyMMdd_HHmmss'
+Get-WiFiScan | 
+    Export-Csv -Path "wifi_scan_$timestamp.csv" -NoTypeInformation
 ```
 
 #### Channel Optimization Check
 ```powershell
-$analysis = Get-WiFiChannelInfo -ShowRecommendations
-Write-Host "Recommended 2.4GHz Channel: $($analysis.'2.4GHz')"
-Write-Host "Recommended 5GHz Channel: $($analysis.'5GHz')"
+$networks = Get-WiFiScan
+$analysis = Get-BestChannel -networks $networks
+Write-Host "Recommended 2.4GHz Channel: $($analysis.'2.4GHz')" -ForegroundColor Cyan
+Write-Host "Recommended 5GHz Channel: $($analysis.'5GHz')" -ForegroundColor Cyan
+
+# Show congestion data
+$congestion = Test-ChannelCongestion -networks $networks
+$congestion.GetEnumerator() | Sort-Object Value | 
+    Select-Object @{N='Channel';E={$_.Name}}, @{N='Congestion';E={[math]::Round($_.Value,2)}} |
+    Format-Table -AutoSize
+```
+
+#### Complete System Report
+```powershell
+# Gather all information
+$networks = Get-WiFiScan
+$mac = Get-MACAddress
+$connected = Get-ConnectedSSID
+$computerInfo = Get-ComputerInfoExtras
+$channels = Get-BestChannel -networks $networks
+$speed = Test-NetworkSpeed
+
+# Display summary
+Write-Host "`n=== WiFi System Report ===" -ForegroundColor Cyan
+Write-Host "Computer: $($computerInfo.ComputerName)"
+Write-Host "IP Address: $($computerInfo.IPAddress)"
+Write-Host "MAC Address: $mac"
+Write-Host "Connected: $($connected.SSID)"
+Write-Host "Networks Found: $($networks.Count)"
+Write-Host "Best 2.4GHz Ch: $($channels.'2.4GHz')"
+Write-Host "Best 5GHz Ch: $($channels.'5GHz')"
+if ($speed.Success) {
+    Write-Host "Avg Latency: $($speed.AverageLatency) ms"
+}
 ```
 
 ### Troubleshooting Common Issues
