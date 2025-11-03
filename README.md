@@ -9,7 +9,7 @@
 
 > A comprehensive WiFi analyzer with intelligent hybrid startup capabilities for diagnosing wireless network issues and optimizing performance. Available as both a PowerShell module and standalone script.
 
-![WiFi Analyzer Guided Setup](https://github.com/user-attachments/assets/cc474cc5-8751-4c9b-9d40-476c3dfcda27)
+![WiFi Analyzer Guided Setup](https://github.com/user-attachments/assets/c9d1b192-5aab-4ede-8925-83db7d72d1cc)
 
 ## 🌟 Features
 
@@ -51,20 +51,21 @@ Start-WiFiAnalyzerAll -SkipReportInfo
 ## 🛠️ Commands & Parameters
 
 | Command                  | Description                                      |
-|-------------------------|--------------------------------------------------|
+|--------------------------|--------------------------------------------------|
+| Start-WiFiAnalyzerAll    | Full analysis and report from CLI                |
 | Start-WiFiAnalyzer       | Launch GUI with startup options                  |
-| Start-WiFiAnalyzerDirect | Launch GUI directly                              |
+| Start-GuidedSetup        | Guided setup walkthrough                         |
+| Start-QuickStart         | Quick start mode                                 |
+| Show-WiFiAnalyzerGUI     | Show main GUI form (alias)                       |
+| Show-StartupChoiceDialog | Show startup choice dialog                       |
+| Show-WiFiReportInfoForm  | Show report info form                            |
 | Get-WiFiScan             | Scan for WiFi networks                           |
 | Get-MACAddress           | Get WiFi adapter MAC address                     |
 | Get-ConnectedSSID        | Get current WiFi connection info                 |
 | Get-ComputerInfoExtras   | Get computer name and IP address                 |
 | Test-ChannelCongestion   | Analyze channel congestion                       |
 | Get-BestChannel          | Recommend best channels                          |
-| Test-NetworkSpeed        | Network latency/speed test                       |
 | Export-WiFiReport        | Export analysis report (HTML/CSV)                |
-| Start-WiFiAnalyzerAll   | Full analysis and report from CLI                |
-| Show-StartupChoiceDialog | Show startup choice dialog                       |
-| Show-ExportInfoForm      | Show export info form                            |
 
 ### Key Parameters
 
@@ -94,6 +95,15 @@ Export-WiFiReport -networks $networks -OutputFormat CSV -SkipReportInfo
 $recommendations = Get-BestChannel -networks $networks
 Write-Host "Best 2.4GHz: $($recommendations.'2.4GHz')"
 Write-Host "Best 5GHz: $($recommendations.'5GHz')"
+
+# Get current connection info
+Get-ConnectedSSID
+
+# Get computer info
+Get-ComputerInfoExtras
+
+# Analyze channel congestion
+Test-ChannelCongestion -networks $networks
 ```
 
 ## 🏢 Location Tracking
