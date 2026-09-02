@@ -1,4 +1,4 @@
-# 📡 WiFi Analyzer - Hybrid Startup Edition
+# 📡 WiFi Analyzer — PowerShell Hybrid Startup Edition
 
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-blue.svg)](https://github.com/PowerShell/PowerShell)
 [![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
@@ -7,9 +7,37 @@
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/WiFiAnalyzer.svg)](https://www.powershellgallery.com/packages/WiFiAnalyzer)
 [![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/WiFiAnalyzer.svg)](https://www.powershellgallery.com/packages/WiFiAnalyzer)
 
-> A comprehensive WiFi analyzer with intelligent hybrid startup capabilities for diagnosing wireless network issues and optimizing performance. Available as both a PowerShell module and standalone script.
+> A Windows PowerShell Wi-Fi diagnostic and reporting tool with guided startup validation, nearby-network scanning, channel analysis, performance testing, and support-ready exports. Available as both a PowerShell module and standalone script.
 
 ![WiFi Analyzer Guided Setup](https://github.com/user-attachments/assets/c9d1b192-5aab-4ede-8925-83db7d72d1cc)
+
+---
+
+## 🌐 Wi-Fi Analyzer Project Family
+
+This PowerShell Wi-Fi Analyzer is part of a larger family of Wi-Fi diagnostic and troubleshooting tools I have developed for Windows, macOS, Linux, iOS/iPadOS, and PowerShell. Each version uses the networking capabilities available on its platform while sharing the same goal: **collect useful Wi-Fi data, identify connectivity problems, and provide actionable diagnostic information for IT support.**
+
+| Platform | Project | Access |
+|---|---|---|
+| 🖥️ **PowerShell / Windows** | **PS Wi-Fi Analyzer** | **This Project** |
+| 🪟🍎🐧 **Windows / macOS / Linux** | Wi-Fi Analyzer — Avalonia / .NET 8 | [GitHub](https://github.com/hov172/WinWiFiAnalyzer) |
+| 🍎 **macOS** | Wi-Fi Analyzer — Windows-style packaged build | [Download DMG](https://github.com/hov172/WinWiFiAnalyzer/releases/download/Windows_Wifi_Report/Wi.Fi.Analyzer.dmg) |
+| 🍎 **macOS Advanced** | WiFi Diag Report + Coverage Mapping | [GitHub](https://github.com/hov172/WifDiagReport) |
+| 📱 **iOS / iPadOS** | Wi-Fi Analyzer Beta | [Apple TestFlight](https://testflight.apple.com/join/hDPGsHzd) |
+
+### Related Wi-Fi Projects
+
+- **Cross-platform Wi-Fi Analyzer:** Windows, macOS, and Linux desktop application built with Avalonia and .NET 8, with advanced radio analysis, connection-health scoring, privacy-aware reporting, and CLI automation.
+- **WiFi Diag Report:** Advanced native macOS diagnostics with floor-plan coverage mapping, heatmaps, Multi-AP analysis, IT Analysis reports, and Help Desk-oriented exports.
+- **iOS / iPadOS Beta:** Mobile diagnostic companion distributed through TestFlight, using the Wi-Fi and networking information Apple makes available to iOS/iPadOS applications.
+
+
+
+## 🎯 Purpose
+
+WiFi Analyzer is intended for Help Desk technicians, desktop support teams, network administrators, students, and power users who need a lightweight Windows troubleshooting tool without installing a full desktop application. It can collect a repeatable snapshot of the local Wi-Fi environment, test basic network performance, recommend less-congested channels, and export the results for IT review.
+
+The **Hybrid Startup** design supports two workflows: **Guided Setup** for users who need help validating Windows requirements and **Quick Start** for technicians who want to begin scanning immediately.
 
 ## 🌟 Features
 
@@ -18,7 +46,7 @@
 - **Quick Start**: Skip validation and go straight to scanning
 - **Preference Memory**: Remembers your startup choice for next time
 
-### Network Analysis
+### Wi-Fi & Network Analysis
 - **Comprehensive Scanning**: Detect all nearby WiFi networks (2.4 GHz & 5 GHz)
 - **Signal Strength Analysis**: Color-coded visualization (Strong/Medium/Weak)
 - **Security Assessment**: WPA3, WPA2, WPA, and Open network detection
@@ -66,7 +94,7 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/hov172/PS_WI-FI_Analyz
 
 ### Interactive Mode (Default)
 ```powershell
-.\wi_fi_analyzer_best_practices_edition.ps1
+.\WiFiAnalyzer.ps1
 ```
 Presents a startup dialog where you can choose:
 - **Guided Setup**: Checks system requirements and helps fix issues
@@ -75,16 +103,16 @@ Presents a startup dialog where you can choose:
 ### Command Line Options
 ```powershell
 # Skip setup dialog and validation
-.\WiFiAnalyzerNew.ps1-QuickStart
+.\WiFiAnalyzerNew.ps1 -QuickStart
 
 # Alias for QuickStart
-.\WiFiAnalyzerNew.ps1-SkipPreflightCheck
+.\WiFiAnalyzerNew.ps1 -SkipPreflightCheck
 
 # Enable verbose diagnostics
-.\WiFiAnalyzerNew.ps1-Verbose
+.\WiFiAnalyzerNew.ps1 -Verbose
 
 # Combine options
-.\WiFiAnalyzerNew.ps1-QuickStart -Verbose
+.\WiFiAnalyzerNew.ps1 -QuickStart -Verbose
 ```
 
 ## 🛠️ Core Functions
@@ -280,6 +308,7 @@ Invoke-WiFiAnalyzerAll -OutputPath "C:\Reports" -OutputFormat HTML
 
 **Jesus Ayala** — IT Manager  
 [GitHub](https://github.com/hov172) | [Ayala Solutions](https://github.com/hov172)
+
 ## 🌐 Connect With Me
 - [GitHub](https://github.com/hov172)  
 - [PowerShell Gallery](https://www.powershellgallery.com/profiles/hov172)  
@@ -306,6 +335,5 @@ Made with ❤️ for better WiFi connectivity
 ## 🆘 Support
 
 For issues, questions, or contributions:
-- 📧 Email support: [Contact IT]
 - 🐛 Report bugs: [GitHub Issues](https://github.com/hov172/PS_WI-FI_Analyzer/issues)
 - 💡 Feature requests: [GitHub Discussions](https://github.com/hov172/PS_WI-FI_Analyzer/discussions)
